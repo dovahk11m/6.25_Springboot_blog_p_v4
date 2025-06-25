@@ -29,7 +29,7 @@ public class UserRepository {
 
 
     /**
-     * 로그인 요청 (회원 정보 조회)
+     * 로그인 요청 (회원 정보 조회!)
      * @param username
      * @param password
      * @return 성공시 User 엔티티, 실패시 null 반환
