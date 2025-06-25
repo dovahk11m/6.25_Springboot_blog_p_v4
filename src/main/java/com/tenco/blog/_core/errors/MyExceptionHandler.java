@@ -4,8 +4,12 @@ import com.tenco.blog._core.errors.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /* @ControllerAdvice
 모든 컨트롤러에서 발생하는 예외처리를 이 클래스에서 처리한다
@@ -30,16 +34,27 @@ public class MyExceptionHandler {
         return "err/400";
     }
 
-    @ExceptionHandler
-    public String ex401(Exception401 e, HttpServletRequest request) {
+//    @ExceptionHandler
+//    public String ex401(Exception401 e, HttpServletRequest request) {
+//
+//        log.warn("💀 401 Unauthorized 에러 발생");
+//        log.warn("요청URL : {}", request.getRequestURL());
+//        log.warn("인증 오류: {}", e.getMessage());
+//        log.warn("User-Agent: {}", request.getHeader("User-Agent"));
+//
+//        request.setAttribute("msg", e.getMessage());
+//        return "err/401";
+//    }
 
-        log.warn("💀 401 Unauthorized 에러 발생");
-        log.warn("요청URL : {}", request.getRequestURL());
-        log.warn("인증 오류: {}", e.getMessage());
-        log.warn("User-Agent: {}", request.getHeader("User-Agent"));
+    @ExceptionHandler(Exception401.class)
+    @ResponseBody // 데이터반환
+    public ResponseEntity<String> ex401ByData(Exception401 e, HttpServletRequest request) {
 
-        request.setAttribute("msg", e.getMessage());
-        return "err/401";
+        String script = "<script> alert('" + e.getMessage() + "'); history.back(); </script>";
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .contentType(MediaType.TEXT_HTML)
+                .body(script);
     }
 
     @ExceptionHandler // 403이 터지면 이 메서드를 호출하라
