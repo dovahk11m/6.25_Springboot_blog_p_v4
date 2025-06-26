@@ -27,9 +27,6 @@ public class UserController {
         log.info("회원정보 수정화면 요청");
 
         User sUser = (User) hs.getAttribute("sessionUser");
-        if (sUser == null) {
-            return "redirect:/login-form";
-        }
         request.setAttribute("user", sUser);
         return "user/update-form";
     }
@@ -42,9 +39,7 @@ public class UserController {
         log.info("게시글 수정 요청");
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스입니다 로그인하세요");
-        }
+
         reqDTO.validate();
         User updateUser = ur.updateById(sessionUser.getId(), reqDTO);
 

@@ -40,12 +40,10 @@ public class BoardController {
     public String updateForm(@PathVariable(name = "id") Long boardId,
                              HttpServletRequest request, HttpSession session) {
 
-        log.info("게시글 수정창 요청 - boardId : {}", boardId);
+        log.info("게시글 수정 화면 요청 - boardId : {}", boardId);
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스입니다 로그인하세요");
-        }
+
         Board board = br.findById(boardId);
         if (board == null) {
             throw new Exception404("게시글이 존재하지 않습니다");
@@ -61,15 +59,13 @@ public class BoardController {
 
     // 수정 액션 요청
     @PostMapping("/board/{id}/update-form")
-    public String update(@PathVariable(name = "id")Long boardId,
+    public String update(@PathVariable(name = "id") Long boardId,
                          HttpSession session, BoardRequest.UpdateDTO reqDTO) {
 
         log.info("게시글 수정 액션 요청 - boardId : {}, 새 제목 {}", boardId, reqDTO.getTitle());
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스입니다");
-        }
+
         reqDTO.validate();
         Board board = br.findById(boardId);
         if (board == null) {
@@ -91,9 +87,7 @@ public class BoardController {
         log.info("게시글 삭제 요청 - id : {}", id);
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스입니다");
-        }
+
         Board board = br.findById(id);
         if (board == null) {
             throw new Exception404("게시글이 존재하지 않습니다");
@@ -114,9 +108,7 @@ public class BoardController {
         log.info("게시글 작성창 요청");
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new Exception401("로그인이 필요한 서비스입니다");
-        }
+
         return "board/save-form";
     }
 
@@ -127,9 +119,7 @@ public class BoardController {
         log.info("게시글 작성 액션 요청 - 제목{}", reqDTO.getTitle());
 
             User sessionUser = (User) session.getAttribute("sessionUser");
-            if (sessionUser == null) {
-                throw new Exception401("로그인이 필요한 서비스입니다");
-            }
+
             reqDTO.validate();
 
             br.save(reqDTO.toEntity(sessionUser));

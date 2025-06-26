@@ -50,7 +50,9 @@ public class MyExceptionHandler {
     @ResponseBody // 데이터반환
     public ResponseEntity<String> ex401ByData(Exception401 e, HttpServletRequest request) {
 
-        String script = "<script> alert('" + e.getMessage() + "'); history.back(); </script>";
+        // location.href = '/join-form'
+        String script = "<script> alert('" + e.getMessage() + "'); location.href = '/login-form'; </script>";
+        //String script = "<script> alert('" + e.getMessage() + "'); history.back(); </script>";
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .contentType(MediaType.TEXT_HTML)
